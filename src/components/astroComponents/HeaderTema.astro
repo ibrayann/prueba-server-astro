@@ -1,0 +1,27 @@
+---
+import { People, Editar, Search } from "../icons/icons.jsx";
+interface Props {
+  title: string;
+  description: string;
+  tema: string;
+}
+const { title, description, tema } = Astro.props;
+
+const icon = {
+  "tema-medicina": "People",
+  "tema-programación": "Editar",
+  "tema-cocina": "Search",
+};
+---
+
+<article class="flex mx-auto">
+  <div class="bg-white my-2 w-28 sm:w-20 h-20 rounded-full p-4">
+    {icon[tema] === "People" && <People />}
+    {icon[tema] === "Editar" && <Editar />}
+    {icon[tema] === "Search" && <Search />}
+  </div>
+  <div class="grid place-content-center ml-5">
+    <h3 class="text-3xl font-bold">{title}</h3>
+    <p class="text-gray-70 font-bold">{description}</p>
+  </div>
+</article>

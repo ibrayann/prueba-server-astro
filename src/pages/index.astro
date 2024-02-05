@@ -1,106 +1,110 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Layout from "../layout/Layout.astro";
+import Showcase from "../components/astroComponents/Showcase.astro";
+import CeoTools from "../components/utilities/CeoTools.jsx";
+import Card from "../components/cards/Card.astro";
+import categorias from "../helpers/categorias.json";
+
+const Allposts = await Astro.glob("./posts/*.md");
+
 export const prerender = true;
 ---
 
-<script>
-  const form = document.querySelector("form");
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const search = formData.get("search")?.toString();
-    if (!search || search.length <= 0) return;
-    console.log(search);
-    const url = new URL("/search", window.location.origin);
-    url.pathname = `/search/${search}`;
-    console.log(url.href.toString());
-    const destination = url.href.toString();
-    window.location.replace(destination);
-  });
-</script>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <Header title={SITE_TITLE} />
-    dasadnasjdnajskdkajshkd
-    <div class="bg-primary dark:bg-primaryDark h-56 text-center pt-2">
-      <h1 class="text-secondary dark:text-white font-bold text-4xl mb-7">
-        ¿Cómo podemos ayudarte? 🤔
-      </h1>
-      <div
-        class="flex rounded-md py-2 px-2 w-3/4 md:w-2/4 lg:w-1/4 my-3 bg-white dark:bg-white text-start mx-auto gap-2"
-      >
-        <form class="flex-1 form">
-          <input
-            class="focus:outline-none w-full"
-            placeholder="Busca algún tema de interés"
-            type="search"
-            name="search"
-            required
-            min="2"
-            max="24"
-            id="search"
-          />
-        </form>
+<Layout title="Home" content="Homepage">
+  <Showcase showExtra={true} />
+  <div class="container mx-auto pb-20">
+    <section class="px-10 xl:px-60 mt-12">
+      <CeoTools client:only />
+
+      <div class="flex justify-between mb-10">
+        <h2 class="text-secondary text-3xl">Explorar todos los temas</h2>
+        <a href="temas" class="my-auto">Ver todo Version 1.0.14</a>
       </div>
 
-      <small id="ayuda" class="text-white px-5">
-        Para recibir ayuda personalizada
-        <a class="underline" href="login"> ingresa con tu cuenta Monbak</a>
-      </small>
-    </div>
-    <main>
-      <h1>🧑‍🚀 Hello, Astronaut!</h1>
-      <p>
-        Welcome to the official <a href="https://astro.build/">Astro</a> blog starter
-        template. This template serves as a lightweight, minimally-styled starting
-        point for anyone looking to build a personal website, blog, or portfolio
-        with Astro.
-      </p>
-      <p>
-        This template comes with a few integrations already configured in your
-        <code>astro.config.mjs</code> file. You can customize your setup with
-        <a href="https://astro.build/integrations">Astro Integrations</a> to add
-        tools like Tailwind, React, or Vue to your project.
-      </p>
-      <p>Here are a few ideas on how to get started with the template:</p>
-      <ul>
-        <li>Edit this page in <code>src/pages/index.astro</code></li>
-        <li>
-          Edit the site header items in <code>src/components/Header.astro</code>
-        </li>
-        <li>
-          Add your name to the footer in <code>src/components/Footer.astro</code
-          >
-        </li>
-        <li>
-          Check out the included blog posts in <code>src/pages/blog/</code>
-        </li>
-        <li>
-          Customize the blog post page layout in <code
-            >src/layouts/BlogPost.astro</code
-          >
-        </li>
-      </ul>
-      <p>
-        Have fun! If you get stuck, remember to <a
-          href="https://docs.astro.build/"
-          >read the docs
-        </a> or <a href="https://astro.build/chat">join us on Discord</a> to ask
-        questions.
-      </p>
-      <p>
-        Looking for a blog template with a bit more personality? Check out <a
-          href="https://github.com/Charca/astro-blog-template"
-          >astro-blog-template
-        </a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-      </p>
-    </main>
-    <Footer />
-  </body>
-</html>
+      <section class="mx-auto">
+        <article class="grid md:grid-cols-3 grid-cols-1 gap-10 mx-auto">
+          {
+            categorias
+              .slice(0, 3)
+              .map((post, index) => (
+                <Card
+                  title={post.categoria}
+                  content={post.descripcion}
+                  to={`/${post.slugcategoria}`}
+                  tema={post.slugcategoria}
+                />
+              ))
+          }
+        </article>
+        <p class="text-2xl text-secondary my-9">Populares</p>
+        <article class="grid-cols-3 gap-10 md:grid hidden">
+          {
+            Allposts.slice(0, 6).map((post) => (
+              <Card
+                title={post.frontmatter.titulo}
+                content={
+                  post
+                    .rawContent()
+                    .toString()
+                    .replace(/[_*]+/g, "")
+                    .slice(0, 100) + "..."
+                }
+                to={`/${post.frontmatter.slug}`}
+                tema={post.frontmatter.slugcategoria}
+              />
+            ))
+          }
+        </article>
+
+        <article class="containerSlice space-x-10 md:hidden">
+          {
+            Allposts.slice(0, 6).map((post) => (
+              <Card
+                title={post.frontmatter.titulo}
+                content={
+                  post
+                    .rawContent()
+                    .toString()
+                    .replace(/[_*]+/g, "")
+                    .slice(0, 100) + "..."
+                }
+                to={`/${post.frontmatter.slug}`}
+                tema={post.frontmatter.slugcategoria}
+                inferior={true}
+                class:list="item"
+              />
+            ))
+          }
+        </article>
+      </section>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .containerSlice {
+    overflow-x: auto; /* Establece el desplazamiento horizontal */
+    overflow-y: hidden;
+    display: flex;
+    scroll-snap-type: × mandatory;
+    scroll-padding: 0 10px;
+    scrollbar-width: thin; /* Para navegadores que soportan esta propiedad */
+    scrollbar-color: transparent transparent; /* Cambia el color del scrollbar a transparente */
+  }
+
+  @media (min-width: 768px) {
+    .containerSlice {
+      overflow: hidden;
+      display: none; /* Corrección: 'display: none;' oculta el elemento */
+    }
+  }
+
+  /* Estilos del scrollbar para navegadores basados en WebKit (como Chrome o Safari) */
+  .containerSlice::-webkit-scrollbar {
+    width: 0; /* Ancho 0 para ocultar el scrollbar */
+  }
+  .containerSlice .item {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+</style>

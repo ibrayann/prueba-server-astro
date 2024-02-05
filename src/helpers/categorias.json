@@ -1,0 +1,32 @@
+[
+  {
+    "categoria": "Medicina",
+    "slugcategoria": "tema-medicina",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    "subcategorias": [
+      "Anatomía",
+      "Farmacología",
+      "Patología"
+    ]
+  },
+  {
+    "categoria": "Programación",
+    "slugcategoria": "tema-programación",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    "subcategorias": [
+      "JavaScript",
+      "Python",
+      "Java"
+    ]
+  },
+  {
+    "categoria": "Cocina",
+    "slugcategoria": "tema-cocina",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    "subcategorias": [
+      "Postres",
+      "Platos principales",
+      "Bebidas"
+    ]
+  }
+]

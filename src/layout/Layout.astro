@@ -1,0 +1,51 @@
+---
+import Footer from "../components/astroComponents/Footer.astro";
+import Header from "../components/astroComponents/Header.astro";
+import { ViewTransitions } from "astro:transitions";
+
+interface Props {
+  title?: string;
+  content?: string;
+}
+
+const { title, content } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="descripcion" content={content} />
+    <title>{`Monbak ${title ? "- " + title : ""}`}</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="src/imgs/monbak-logo-dark.avif"
+    />
+    <link rel="shortcut icon" href="https://www.monbak.com/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://www.monbak.com//favicon.svg"
+    />
+
+    <link
+      rel="preconnect"
+      href="https://src-statics.s3.us-west-2.amazonaws.com"
+    />
+    <ViewTransitions />
+  </head>
+  <body class="bg-bgLayout">
+    <header>
+      <Header />
+    </header>
+    <main class="min-h-[60vh]">
+      <slot />
+    </main>
+    <footer>
+      <Footer />
+    </footer>
+  </body>
+</html>

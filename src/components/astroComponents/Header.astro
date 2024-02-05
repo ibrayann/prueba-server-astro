@@ -1,0 +1,23 @@
+---
+import imagenNormal from "../../imgs/monbak-logo.avif";
+import imagenDark from "../../imgs/monbak-logo-dark.avif";
+import Perfil from "../utilities/Perfil.jsx";
+---
+
+<nav
+  class="flex bg-primary dark:bg-primaryDark justify-between py-7 md:px-12 px-3"
+>
+  <a href="/" class="my-auto">
+    <img
+      src={imagenNormal.src}
+      alt="Logo Monbak"
+      class="w-24 md:w-40 dark:hidden"
+    />
+    <img
+      src={imagenDark.src}
+      alt="Logo Monbak"
+      class="w-24 md:w-40 hidden dark:inline"
+    />
+  </a>
+  {(<Perfil client:only />)}
+</nav>

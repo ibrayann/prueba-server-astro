@@ -1,0 +1,77 @@
+---
+import Layout from "../layout/Layout.astro";
+import PostBasic from "../components/astroComponents/PostBasic.astro";
+import HeaderTema from "../components/astroComponents/HeaderTema.astro";
+import categorias from "../helpers/categorias.json";
+import { Home, MenorQue } from "../components/icons/icons";
+export const prerender = true;
+
+export const getStaticPaths = async () => {
+  const posts = await Astro.glob("./posts/*.md");
+
+  return posts.map((post) => ({
+    params: {
+      slugcategoria: post.frontmatter.slugcategoria,
+    },
+    props: {
+      post,
+    },
+  }));
+};
+const AllPost = await Astro.glob("./posts/*.md");
+const postsFiltered = AllPost.filter(
+  (post) =>
+    post.frontmatter.slugcategoria === Astro.params.slugcategoria &&
+    post.frontmatter.estado === "Publicado"
+);
+
+const categoriaSelect = categorias.filter(
+  (categoria) => categoria.slugcategoria === Astro.params.slugcategoria
+);
+---
+
+<Layout title={categoriaSelect[0].categoria}>
+  <div class="container mx-auto">
+    <section class="2xl:px-96 xl:px-72 lg:px-48 md:px-32 mx-10 mt-12 space-y-8">
+      <div class="flex items-center gap-3">
+        <nav class="flex" aria-label="Breadcrumb">
+          <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li
+              class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
+            >
+              <a href="/" class="inline-flex items-center text-sm font-medium">
+                <Home />
+                Home
+              </a>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <MenorQue />
+                <a
+                  href="#"
+                  class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
+                  >{categoriaSelect[0].categoria}</a
+                >
+              </div>
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <HeaderTema
+        tema={categoriaSelect[0].slugcategoria}
+        title={categoriaSelect[0].categoria}
+        description={categoriaSelect[0].descripcion}
+      />
+
+      {
+        postsFiltered.map((post) => (
+          <PostBasic
+            title={post.frontmatter.titulo}
+            description={post.rawContent().toString().replace(/[_*]+/g, "")}
+            to={post.frontmatter.slug}
+          />
+        ))
+      }
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,65 @@
+---
+import LoginForm from "../components/utilities/Login.jsx";
+import imagenNormal from "../imgs/monbak-logo.avif";
+import Footer from "../components/astroComponents/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="https://www.monbak.com/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://www.monbak.com//favicon.svg"
+    />
+    <link rel="mask-icon" href="/favicon.svg" color="#4C636D" />
+    <link
+      rel="preconnect"
+      href="https://src-statics.s3.us-west-2.amazonaws.com"
+    />
+  </head>
+  <body class="bg-[#E8E8E8]">
+    <main class="min-h-[60vh] pt-10">
+      <div
+        class="container mx-auto grid py-10 items-center justify-center place-items-center"
+      >
+        <section class="rounded-2xl py-6 w-96">
+          <div class="my-5 space-y-2 leading-loose">
+            <img
+              src={imagenNormal.src}
+              alt="Logo Monbak"
+              width="200px"
+              class="mb-12 mx-auto"
+            />
+            <p class="text-xl font-semibold text-gray-900">Bienvenido</p>
+            <small class="text-sm"
+              >Ingresa tu email y contraseña para continuar</small
+            >
+          </div>
+          <LoginForm client:visible />
+          <div class="my-5">
+            <div class="flex justify-around">
+              <a href="/" class="my-3 text-center underline block text-xs"
+                >Volver al inicio</a
+              >
+              <a class="my-3 text-center underline block text-xs"
+                >Recuperar contraseña</a
+              >
+            </div>
+            <small class="leading-3 text-xs text-gray-500"
+              >Al ingresar a Monbak.com aceptas los terminos y condiciones y
+              asumes la responsabilidad de el buen uso y para los fines
+              establecidos del sitio.</small
+            >
+          </div>
+        </section>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

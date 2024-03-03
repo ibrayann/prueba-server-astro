@@ -3,6 +3,8 @@ export const prerender = false;
 import PostBasic from "../../components/astroComponents/PostBasic.astro";
 import Layout from "../../layout/Layout.astro";
 
+return Astro.redirect("/login");
+
 console.log(Astro.url.pathname);
 const params = Astro.request.url;
 

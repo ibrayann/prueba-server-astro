@@ -1,17 +1,16 @@
 ---
-
 import Layout from "../layout/Layout.astro";
 import Encuesta from "../components/ReactComponents/Encuesta";
 import { Home, MenorQue } from "../components/icons/icons";
 import ToLogin from "../components/utilities/ToLogin";
-export const prerender = true
-
-
+export const prerender = true;
 
 /* httponly cookies */
 
 const user = Astro.cookies.get("user");
-const role = user?.value ? JSON.parse(user.value).role : null;
+if (!user) {
+  return Astro.redirect("/login");
+}
 
 export const getStaticPaths = async () => {
   const posts = await Astro.glob("./posts/*.md");
@@ -28,33 +27,6 @@ export const getStaticPaths = async () => {
 
 const { Content, frontmatter } = Astro.props.post;
 
-function determinarVisibilidad(frontmatter, user) {
-  const role = user?.value ? JSON.parse(user.value).role : null;
-  console.log(role);  
-  if (frontmatter.publico === "general") {
-    return true;
-  }
-
-  if (role && role === "ceo") {
-
-    return true;
-  }
-
-  if (!user) {
-    console.log("No puedes ver esta página sin iniciar sesión");
-    return false;
-  }
-
-  if (role && role !== "ceo" && frontmatter.publico !== user?.role) {
-    console.log("No tienes permiso para ver esta página");
-    return false;
-  }
-
-
-}
-
-const visible = determinarVisibilidad(frontmatter, user);
-
 const fecha = new Date(frontmatter.createdAt);
 const date = new Date(fecha);
 const formattedDate = date.toLocaleDateString("es-ES", {
@@ -62,13 +34,9 @@ const formattedDate = date.toLocaleDateString("es-ES", {
   month: "long",
   year: "numeric",
 });
-
-
 ---
 
 <Layout title={frontmatter.titulo}>
-  <ToLogin client:only publico={frontmatter.publico} />
-
   <section class="mt-10 mx-5 sm:h-full">
     <div class="">
       <div class="2xl:px-96 xl:px-72 lg:px-48 md:px-32">
@@ -85,7 +53,7 @@ const formattedDate = date.toLocaleDateString("es-ES", {
                   class="inline-flex items-center text-sm font-medium"
                 >
                   <Home />
-                   Home
+                  Home
                 </a>
               </li>
               <li>
@@ -111,10 +79,9 @@ const formattedDate = date.toLocaleDateString("es-ES", {
           </nav>
         </div>
         <!-- Header -->
-        {
-          visible ? (<section
+        <section
           id="header"
-          class="justify-between mb-10 mt-20 gap-4 items-center flex-col md:flex-row "
+          class="justify-between mb-10 mt-20 gap-4 items-center flex-col md:flex-row"
         >
           <h2 class="font-bold text-5xl text-secondary">
             {frontmatter.titulo}
@@ -127,79 +94,19 @@ const formattedDate = date.toLocaleDateString("es-ES", {
               viewBox="0 0 24 24"
               ><path
                 d="M10 3V5H5V19H19V14H21V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H10ZM17.5858 5H13V3H21V11H19V6.41421L12 13.4142L10.5858 12L17.5858 5Z"
-              ></path></svg>
+              ></path></svg
+            >
           </a>
         </section>
-        <div id="info" class=" mb-20 mt-5">
+        <div id="info" class="mb-20 mt-5">
           <p>Publidado el {formattedDate} by Monbak SpA.</p>
         </div>
         <!-- Content -->
-        <div id="content" class="text-gray-600 leading-loose ">
+        <div id="content" class="text-gray-600 leading-loose">
           <Content />
         </div>
         <Encuesta client:visible id={frontmatter.id} />
-        ) : ( 
-          <svg
-          role="img"
-          id="spinner"
-          aria-labelledby="loading-aria"
-          viewBox="0 0 1280 1000"
-          preserveAspectRatio="none"
-          class="my-20"
-        >
-          <title id="loading-aria">Loading...</title>
-          <rect
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            clip-path="url(#clip-path)"
-            style='fill: url("#fill");'></rect>
-          <defs>
-            <clipPath id="clip-path">
-              <rect x="4" y="13" rx="3" ry="3" width="100%" height="10%"></rect>
-              <rect x="4" y="150" rx="3" ry="3" width="100%" height="5%"></rect>
-              <rect x="4" y="300" rx="3" ry="3" width="100%" height="30%"
-              ></rect>
-              <rect x="4" y="700" rx="3" ry="3" width="100%" height="50%"
-              ></rect>
-            </clipPath>
-            <linearGradient id="fill">
-              <stop offset="0.599964" stop-color="#DDDFE0" stop-opacity="1">
-                <animate
-                  attributeName="offset"
-                  values="-2; -2; 1"
-                  keyTimes="0; 0.25; 1"
-                  dur="2s"
-                  repeatCount="indefinite"></animate>
-              </stop>
-              <stop offset="1.59996" stop-color="#CECECE" stop-opacity="1">
-                <animate
-                  attributeName="offset"
-                  values="-1; -1; 2"
-                  keyTimes="0; 0.25; 1"
-                  dur="2s"
-                  repeatCount="indefinite"></animate>
-              </stop>
-              <stop offset="2.59996" stop-color="#DDDFE0" stop-opacity="1">
-                <animate
-                  attributeName="offset"
-                  values="0; 0; 3"
-                  keyTimes="0; 0.25; 1"
-                  dur="2s"
-                  repeatCount="indefinite"></animate>
-              </stop>
-            </linearGradient>
-          </defs>
-        </svg>)
-       
-        }
-
-
-       
-        
       </div>
     </div>
   </section>
-
 </Layout>

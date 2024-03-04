@@ -2,6 +2,7 @@
 export const prerender = false;
 import PostBasic from "../../components/astroComponents/PostBasic.astro";
 import Layout from "../../layout/Layout.astro";
+import { Home, MenorQue } from "../../components/icons/icons";
 
 console.log(Astro.url.pathname);
 const params = Astro.request.url;
@@ -35,12 +36,14 @@ let postsFiltered = AllPost.filter((post) => {
             <li
               class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
             >
+              <Home />
               <a href="/" class="inline-flex items-center text-sm font-medium">
                 Home
               </a>
             </li>
             <li>
               <div class="flex items-center">
+                <MenorQue />
                 <a
                   href="#"
                   class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"

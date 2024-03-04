@@ -1,0 +1,96 @@
+---
+import Layout from "../layout/Layout.astro";
+import Encuesta from "../components/ReactComponents/Encuesta";
+import { Home, MenorQue } from "../components/icons/icons";
+export const prerender = false;
+import { getEntry } from "astro:content";
+
+const { slug } = Astro.params;
+
+if (slug === undefined) {
+  throw new Error("Slug is required");
+}
+
+const entry = await getEntry("posts", slug);
+if (entry === undefined) {
+  return Astro.redirect("/404");
+}
+
+const { Content } = await entry.render();
+/* httponly cookies */
+---
+
+<Layout title={entry.data.titulo}>
+  <section class="mt-10 mx-5 sm:h-full">
+    <div class="">
+      <div class="2xl:px-96 xl:px-72 lg:px-48 md:px-32">
+        <!-- cambiar a max-w -->
+        <div class="flex items-center gap-3">
+          <!-- Breadcrumb -->
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+              <li
+                class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
+              >
+                <a
+                  href="/"
+                  class="inline-flex items-center text-sm font-medium"
+                >
+                  <Home />
+                  Home
+                </a>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <MenorQue />
+                  <a
+                    href={entry.data.slugcategoria}
+                    class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
+                    >{entry.data.categoria}</a
+                  >
+                </div>
+              </li>
+              <li aria-current="page">
+                <div class="flex items-center">
+                  <MenorQue />
+                  <span
+                    class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
+                    >{entry.data.titulo}</span
+                  >
+                </div>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <!-- Header -->
+        <section
+          id="header"
+          class="justify-between mb-10 mt-20 gap-4 items-center flex-col md:flex-row"
+        >
+          <h2 class="font-bold text-5xl text-secondary">
+            {entry.data.titulo}
+          </h2>
+          <a class="ms-auto flex gap-2 font-semibold" id="enlace">
+            Compartir
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 flex"
+              viewBox="0 0 24 24"
+              ><path
+                d="M10 3V5H5V19H19V14H21V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H10ZM17.5858 5H13V3H21V11H19V6.41421L12 13.4142L10.5858 12L17.5858 5Z"
+              ></path></svg
+            >
+          </a>
+        </section>
+        <div id="info" class="mb-20 mt-5">
+          <p>Publidado el {entry.data.createdAt} by Monbak SpA.</p>
+        </div>
+        <!-- Content -->
+        <div id="content" class="text-gray-600 leading-loose">
+          <Content />
+        </div>
+        <Encuesta client:visible id={entry.data.id} />
+      </div>
+    </div>
+  </section>
+</Layout>

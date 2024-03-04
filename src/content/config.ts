@@ -1,16 +1,23 @@
-import { defineCollection, z } from 'astro:content';
+/* import { defineCollection, z } from "astro:content";
 
-const blog = defineCollection({
-	type: 'content',
-	// Type-check frontmatter using a schema
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
-	}),
+const posts = defineCollection({
+  type: "content",
+  // Type-check frontmatter using a schema
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    categoria: z.string(),
+    slugcategoria: z.string(),
+    descripcion: z.string(),
+    author: z.string(),
+    createdAt: z.coerce.date(),
+    tags: z.array(z.string()),
+    estado: z.string(),
+    publico: z.string(),
+    likes: z.undefined(), // Puedes usar z.unknown() si no estás seguro si será undefined
+    id: z.string(),
+  }),
 });
 
-export const collections = { blog };
+export const collections = { posts };
+ */

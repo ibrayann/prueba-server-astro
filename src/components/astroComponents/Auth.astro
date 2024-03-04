@@ -1,0 +1,11 @@
+---
+import { Children } from "react";
+
+export const prerender = false;
+const user = Astro.cookies.get("user");
+if (!user) {
+  return Astro.redirect("/login");
+}
+---
+
+<slot />

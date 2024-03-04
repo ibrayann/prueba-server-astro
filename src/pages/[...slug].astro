@@ -16,6 +16,26 @@ if (entry === undefined) {
   return Astro.redirect("/404");
 }
 
+const user = Astro.cookies.get("user");
+const role = user?.value ? JSON.parse(user.value).role : null;
+
+const publico = entry.data.publico;
+
+if (publico !== "general") {
+  if (!user) {
+    console.log("No puedes ver esta página sin iniciar sesión");
+    return Astro.redirect("/login");
+  }
+
+  if (role !== "ceo" && publico !== role) {
+    console.log("No tienes permiso para ver esta página");
+    return Astro.redirect("/login");
+  }
+
+  if (role === "ceo") {
+  }
+}
+
 const { Content } = await entry.render();
 /* httponly cookies */
 ---

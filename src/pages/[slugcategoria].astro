@@ -9,7 +9,7 @@ export const prerender = true;
 export const getStaticPaths = async () => {
   const posts = await Astro.glob("./posts/*.md");
 
-  return posts.map((post) => ({
+  return posts.map((post: any) => ({
     params: {
       slugcategoria: post.frontmatter.slugcategoria,
     },
@@ -20,7 +20,7 @@ export const getStaticPaths = async () => {
 };
 const AllPost = await Astro.glob("./posts/*.md");
 const postsFiltered = AllPost.filter(
-  (post) =>
+  (post: any) =>
     post.frontmatter.slugcategoria === Astro.params.slugcategoria &&
     post.frontmatter.estado === "Publicado"
 );
@@ -64,7 +64,7 @@ const categoriaSelect = categorias.filter(
       />
 
       {
-        postsFiltered.map((post) => (
+        postsFiltered.map((post: any) => (
           <PostBasic
             title={post.frontmatter.titulo}
             description={post.rawContent().toString().replace(/[_*]+/g, "")}

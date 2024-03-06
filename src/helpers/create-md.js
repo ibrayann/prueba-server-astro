@@ -18,6 +18,7 @@ const postsFiler = await getPost();
 
 export const createMd = ({ posts }) => {
   const contentFolder = path.join(process.cwd(), "src/pages/posts");
+  const collectionFolder = path.join(process.cwd(), "src/content/posts");
   const createMd = ({
     titulo,
     author,
@@ -82,7 +83,11 @@ ${content}
     });
 
     fs.writeFile(`${contentFolder}/${fileName}.md`, markdown, "utf8")
-      .then(() => console.log("✅ File created " + fileName))
+      .then(() => console.log("✅ File created by pages" + fileName))
+      .catch((err) => console.log(err));
+
+    fs.writeFile(`${collectionFolder}/${fileName}.md`, markdown, "utf8")
+      .then(() => console.log("✅ File created by collection " + fileName))
       .catch((err) => console.log(err));
   });
 };

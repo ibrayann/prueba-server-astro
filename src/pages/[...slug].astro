@@ -21,6 +21,14 @@ const role = user?.value ? JSON.parse(user.value).role : null;
 
 const publico = entry.data.publico;
 
+const fecha = new Date(entry.data.createdAt);
+const date = new Date(fecha);
+const formattedDate = date.toLocaleDateString("es-ES", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
 if (publico !== "general") {
   if (!user) {
     console.log("No puedes ver esta página sin iniciar sesión");
@@ -103,7 +111,7 @@ const { Content } = await entry.render();
           </a>
         </section>
         <div id="info" class="mb-20 mt-5">
-          <p>Publidado el {entry.data.createdAt} by Monbak SpA.</p>
+          <p>Publidado el {formattedDate} by Monbak SpA.</p>
         </div>
         <!-- Content -->
         <div id="content" class="text-gray-600 leading-loose">

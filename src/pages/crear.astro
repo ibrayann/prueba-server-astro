@@ -1,0 +1,22 @@
+---
+import Layout from "../layout/Layout.astro";
+import PrePost from "../components/editorComponents/PrePost.jsx";
+import User from "../components/utilities/User";
+import imagenNormal from "../imgs/monbak-logo.avif";
+---
+
+<Layout>
+  <section class="container mx-auto lg:px-56 mb-20">
+    <section
+      class="px-10 xl:px-60 mt-12 text-center bg-white py-20 rounded-2xl shadow-md"
+    >
+      <img
+        src={imagenNormal.src}
+        alt="Logo Monbak"
+        class="w-32 mx-auto mb-10 md:w-56"
+      />
+      <User client:only />
+      <PrePost client:only transition:persist />
+    </section>
+  </section>
+</Layout>

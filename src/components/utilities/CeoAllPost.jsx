@@ -37,6 +37,11 @@ const CeoAllPost = () => {
         setLoading(false);
       });
   }, []);
+  function toCamelCase(str) {
+    return str
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());
+  }
 
   return (
     <>
@@ -79,7 +84,7 @@ const CeoAllPost = () => {
         </form>
         <div className="col-span-3"></div>
         <button className="bg-primaryDark col-span-2 text-white px-4 py-2 rounded-md items-stretch">
-          <a href="/editor">Crear Post</a>
+          <a href="">Publicar Posts</a>
         </button>
       </section>
 
@@ -89,7 +94,7 @@ const CeoAllPost = () => {
           <div className="bg-white p-8 rounded-lg top-10 bottom-10 shadow-lg z-50 relative  w-[80%]  overflow-y-auto">
             <button
               className="absolute top-4 right-4 text-gray-700 hover:text-gray-900"
-              onClick={isOpen}
+              onClick={() => setIsOpen(false)}
             >
               <svg
                 className="w-6 h-6"
@@ -112,7 +117,7 @@ const CeoAllPost = () => {
       )}
 
       {loading ? (
-        <div className="text-center mt-10">Cagando</div>
+        <div className="text-center mt-10">Cargando</div>
       ) : (
         <div className="relative overflow-x-auto mt-5 pb-20">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -136,30 +141,32 @@ const CeoAllPost = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredPosts.map((post) => (
-                <tr key={post.titulo} className=" border  hover:bg-gray-100">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-700 whitespace-nowrap "
-                  >
-                    {post.titulo.length > 50
-                      ? post.titulo.substring(0, 50) + "..."
-                      : post.titulo}
-                  </th>
-                  <td className="px-6 py-4">{post.autor}</td>
-                  <td className="px-6 py-4">{formatDate(post.createdAt)}</td>
-                  <td className="px-6 py-4">{post.estado}</td>
-
-                  <td className="px-6 py-4">
-                    <button
-                      className="px-6 py-4"
-                      onClick={() => handleEditar(post.id)}
+              {filteredPosts
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((post) => (
+                  <tr key={post.titulo} className=" border  hover:bg-gray-100">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-700 whitespace-nowrap "
                     >
-                      Editar
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      {post.titulo.length > 50
+                        ? post.titulo.substring(0, 50) + "..."
+                        : post.titulo}
+                    </th>
+                    <td className="px-6 py-4">{post.autor}</td>
+                    <td className="px-6 py-4">{formatDate(post.createdAt)}</td>
+                    <td className="px-6 py-4">{toCamelCase(post.estado)}</td>
+
+                    <td className="px-6 py-4">
+                      <button
+                        className="px-6 py-4"
+                        onClick={() => handleEditar(post.id)}
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

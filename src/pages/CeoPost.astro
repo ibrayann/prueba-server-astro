@@ -1,0 +1,12 @@
+---
+import Layout from "../layout/Layout.astro";
+import CeoAllPost from "../components/utilities/CeoAllPost.jsx";
+---
+
+<Layout>
+  <div class="bg-white min-h-[70vh]">
+    <section class="px-10">
+      <CeoAllPost client:only />
+    </section>
+  </div>
+</Layout>

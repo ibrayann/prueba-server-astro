@@ -4,6 +4,7 @@ import Encuesta from "../components/ReactComponents/Encuesta";
 import { Home, MenorQue } from "../components/icons/icons";
 export const prerender = false;
 import { getEntry } from "astro:content";
+import HomeIndex from "../components/utilities/HomeIndex";
 
 const { slug } = Astro.params;
 
@@ -55,40 +56,12 @@ const { Content } = await entry.render();
         <!-- cambiar a max-w -->
         <div class="flex items-center gap-3">
           <!-- Breadcrumb -->
-          <nav class="flex" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-              <li
-                class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
-              >
-                <a
-                  href="/"
-                  class="inline-flex items-center text-sm font-medium"
-                >
-                  <Home />
-                  Home
-                </a>
-              </li>
-              <li>
-                <div class="flex items-center">
-                  <MenorQue />
-                  <a
-                    href={entry.data.slugcategoria}
-                    class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
-                    >{entry.data.categoria}</a
-                  >
-                </div>
-              </li>
-              <li aria-current="page">
-                <div class="flex items-center">
-                  <MenorQue />
-                  <span
-                    class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
-                    >{entry.data.titulo}</span
-                  >
-                </div>
-              </li>
-            </ol>
-          </nav>
+          <HomeIndex
+            client:visible
+            slugCategoria={entry.data.slugcategoria}
+            categoria={entry.data.categoria}
+            titulo={entry.data.titulo}
+          />
         </div>
         <!-- Header -->
         <section

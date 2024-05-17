@@ -11,7 +11,9 @@ const posts = await Astro.glob("../../pages/posts/*.md");
 
 <script>
   const form = document.querySelector("form");
+  console.log("hola");
   form?.addEventListener("submit", (e) => {
+    debugger;
     e.preventDefault();
     const formData = new FormData(form);
     const search = formData.get("search")?.toString();
@@ -24,6 +26,7 @@ const posts = await Astro.glob("../../pages/posts/*.md");
     window.location.replace(destination);
   });
 </script>
+
 {
   showExtra && (
     <div class="bg-primary dark:bg-primaryDark h-56 text-center pt-2">

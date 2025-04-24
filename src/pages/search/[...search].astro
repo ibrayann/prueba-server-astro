@@ -1,79 +1,49 @@
 ---
-export const prerender = false;
-import PostBasic from "../../components/astroComponents/PostBasic.astro";
-import Layout from "../../layout/Layout.astro";
-import { Home, MenorQue } from "../../components/icons/icons";
+export const prerender = false
+import PostBasic from '../../components/astroComponents/PostBasic.astro'
+import Layout from '../../layout/Layout.astro'
+import { Home, MenorQue } from '../../components/icons/icons'
 
-console.log(Astro.url.pathname);
-const params = Astro.request.url;
+const searchQuery = Astro.params.search || ''
+const busqueda = decodeURIComponent(searchQuery)
 
-const lastSlashIndex = params.lastIndexOf("/");
-const tags = params.substring(lastSlashIndex + 1).toLowerCase();
-const tagsFiltered = tags.split("%20");
-const busqueda = tags.replace(/%20/g, " ");
-
-const AllPost = await Astro.glob("../posts/*.md");
+const AllPost = await Astro.glob('../posts/*.md')
 let postsFiltered = AllPost.filter((post) => {
-  debugger;
-  let postTags = post.frontmatter.tags
-    .toLowerCase()
-    .replace(/,/g, " ")
-    .split(" ")
-    .map((s: string) => s.trim());
+  if (!searchQuery) return false
 
-  return tagsFiltered.some((tag) =>
-    postTags.includes(tag.trim().toLowerCase())
-  );
-});
+  const searchTerms = searchQuery.toLowerCase().split(' ')
+  const postContent = `${post.frontmatter.titulo} ${post.frontmatter.descripcion} ${post.frontmatter.tags}`.toLowerCase()
+
+  return searchTerms.every((term) => postContent.includes(term))
+})
 ---
 
 <Layout>
   <div class="container mx-auto">
-    <section class="px-10 xl:px-60 mt-12 space-y-8">
+    <section class="px-10 xl:px-60 mt-12 pb-24 space-y-8">
       <div class="flex items-center gap-3">
         <nav class="flex mt-10" aria-label="Breadcrumb">
           <ol class="inline-flex items-center space-x-1 md:space-x-3">
-            <li
-              class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
-            >
+            <li class="inline-flex items-center text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400">
               <Home />
-              <a href="/" class="inline-flex items-center text-sm font-medium">
-                Home
-              </a>
+              <a href="/" class="inline-flex items-center text-sm font-medium"> Home </a>
             </li>
             <li>
               <div class="flex items-center">
                 <MenorQue />
-                <a
-                  href="#"
-                  class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400"
-                  >Resultado de busqueda: {busqueda}</a
-                >
+                <a href="#" class="ml-1 text-sm font-medium text-secondary hover:text-gray-400 md:ml-2 dark:text-secondary dark:hover:text-gray-400">Resultado de busqueda: {busqueda}</a>
               </div>
             </li>
           </ol>
         </nav>
       </div>
 
-      {
-        postsFiltered.length > 0 &&
-          postsFiltered.map((post) => (
-            <PostBasic
-              title={post.frontmatter.titulo}
-              description={post.frontmatter.descripcion}
-              to={post.frontmatter.slug}
-            />
-          ))
-      }
+      {postsFiltered.length > 0 && postsFiltered.map((post) => <PostBasic title={post.frontmatter.titulo} description={post.frontmatter.descripcion} to={post.frontmatter.slug} />)}
       {
         postsFiltered.length == 0 && (
           <div class="flex flex-col items-center justify-center">
-            <h1 class="text-3xl font-bold text-center text-gray-700 dark:text-gray-200">
-              No se encontraron resultados
-            </h1>
-            <p class="text-center text-gray-500 dark:text-gray-400">
-              Intenta con otra busqueda
-            </p>
+            <h1 class="text-3xl font-bold text-center text-gray-700 dark:text-gray-200">No se encontraron resultados</h1>
+            <p class="text-center text-gray-500 dark:text-gray-400">Intenta con otra busqueda</p>
           </div>
         )
       }
